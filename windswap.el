@@ -1,8 +1,9 @@
-;;; windswap.el --- directional window-moving routines -*- lexical-binding: t; -*-
+;;; windswap.el --- directional window-moving routines
 
 ;; Copyright (C) 2018 Ashok Menon
 
 ;; Author: Ashok Menon <amenon94@gmail.com>
+;; URL: http://github.com/amnn/windswap
 ;; Keywords: window, selection, convenience, windmove
 ;; Version: 0.0.1
 
@@ -28,6 +29,8 @@
 ;;; Code:
 
 (defun windswap-do-window-swap (dir)
+  "Swap the current window's buffer with its neighbour's in the direction DIR."
+
   (let* ((this-window (car (window-list)))
          (that-window (window-in-direction dir this-window t 0 t)))
     (when (and this-window that-window)
@@ -45,38 +48,48 @@
         (set-window-buffer this-window that-buffer)))))
 
 (defun windswap-left ()
-  "Swap the buffer in the current window with the buffer of the
+  "Swap buffer to left neighbour.
+
+Swap the buffer in the current window with the buffer of the
 window to its left, as calculated by `window-in-direction', with
 wrap-around."
   (interactive)
   (windswap-do-window-swap 'left))
 
 (defun windswap-up ()
-  "Swap the buffer in the current window with the buffer of the
+  "Swap buffer neighbour above.
+
+Swap the buffer in the current window with the buffer of the
 window above it, as calculated by `window-in-direction', with
 wrap-around."
   (interactive)
   (windswap-do-window-swap 'above))
 
 (defun windswap-right ()
-  "Swap the buffer in the current window with the buffer of the
+  "Swap buffer to right neighbour.
+
+Swap the buffer in the current window with the buffer of the
 window to its right, as calculated by `window-in-direction', with
 wrap-around."
   (interactive)
   (windswap-do-window-swap 'right))
 
 (defun windswap-down ()
-  "Swap the buffer in the current window with the buffer of the
+  "Swap buffer to neighbour below.
+
+Swap the buffer in the current window with the buffer of the
 window below it, as calculated by `window-in-direction', with
 wrap-around."
   (interactive)
   (windswap-do-window-swap 'below))
 
 (defun windswap-default-keybindings (&optional modifier)
-  "Installs default keybindings for `windswap' designed to work
-with the default keybindings of `windmove'. Default MODIFIER is
-`shift'. Assigns the keycodes M-<MODIFIER>-{left,up,right,down},
-or C-M-{left,up,right,down} when MODIFIER is META."
+  "Install default keybindings for `windswap'.
+
+Designed to work with the default keybindings of
+`windmove'.  Default MODIFIER is `shift'.  Assigns the keycodes
+M-<MODIFIER>-{left,up,right,down}, or C-M-{left,up,right,down}
+when MODIFIER is META."
   (interactive)
   (unless modifier (setq modifier 'shift))
   (let ((other-modifier (if (eq 'meta modifier) 'control 'meta)))
